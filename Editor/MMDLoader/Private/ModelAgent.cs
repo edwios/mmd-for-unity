@@ -14,7 +14,7 @@ namespace MMD {
 			if (string.IsNullOrEmpty(file_path)) {
 				throw new System.ArgumentException();
 			}
-			file_path_ = file_path;
+			file_path_ = file_path.Replace('\\', '/');
 			header_ = null;
 			try {
 				//PMX読み込みを試みる
@@ -58,6 +58,7 @@ namespace MMD {
 	
 				// プレファブパスの設定
 				prefab_path = pmx_format.meta_header.folder + "/" + pmx_format.meta_header.name + ".prefab";
+				prefab_path = prefab_path.Replace('\\', '/');
 			} else {
 				//PMXエクスポーターを使用しない
 				//PMDファイルのインポート
@@ -79,6 +80,7 @@ namespace MMD {
 	
 				// プレファブパスの設定
 				prefab_path = pmd_format.folder + "/" + pmd_format.name + ".prefab";
+				prefab_path = prefab_path.Replace('\\', '/');
 			}
 			// プレファブ化
 			PrefabUtility.CreatePrefab(prefab_path, game_object, ReplacePrefabOptions.ConnectToPrefab);

@@ -39,10 +39,12 @@ public class AlphaReadableTexture : System.IDisposable {
 	{
 		//テクスチャ破棄
 		foreach (string texture_path in texture_path_list_.Where(x=>!string.IsNullOrEmpty(x)).Distinct()) {
-			DeleteReadableTexture(texture_path);
+			string atexture_path = texture_path.Replace('\\', '/');
+			DeleteReadableTexture(atexture_path);
 		}
 		//ディレクトリの破棄
 		string path = Application.dataPath + "/../" + temporary_directory_; //"Asset/"が被るので1階層上がる
+		path = path.Replace('\\', '/');
 		if (System.IO.Directory.Exists(path)) {
 			System.IO.Directory.Delete(path, true);
 		}
@@ -62,7 +64,9 @@ public class AlphaReadableTexture : System.IDisposable {
 	{
 		if (!string.IsNullOrEmpty(texture_path)) {
 			string base_texture_path = current_directory_ + texture_path;
+			base_texture_path = base_texture_path.Replace('\\', '/');
 			string readable_texture_path = temporary_directory_ + texture_path;
+			readable_texture_path = readable_texture_path.Replace('\\', '/');
 			CreateDirectoryPath(System.IO.Path.GetDirectoryName(readable_texture_path));
 			bool is_copy_success = AssetDatabase.CopyAsset(base_texture_path, readable_texture_path);
 			if (!is_copy_success) {
@@ -81,6 +85,7 @@ public class AlphaReadableTexture : System.IDisposable {
 		Texture2D result = null;
 		if (!string.IsNullOrEmpty(texture_path)) {
 			string readable_texture_path = temporary_directory_ + texture_path;
+			readable_texture_path = readable_texture_path.Replace('\\', '/');
 			result = (Texture2D)AssetDatabase.LoadAssetAtPath(readable_texture_path, typeof(Texture2D));
 		}
 		return result;
@@ -94,6 +99,7 @@ public class AlphaReadableTexture : System.IDisposable {
 	{
 		if (!string.IsNullOrEmpty(texture_path)) {
 			string readable_texture_path = temporary_directory_ + texture_path;
+			readable_texture_path = readable_texture_path.Replace('\\', '/');
 			AssetDatabase.DeleteAsset(readable_texture_path);
 		}
 	}
@@ -102,8 +108,10 @@ public class AlphaReadableTexture : System.IDisposable {
 	/// ディレクトリの作成(親ディレクトリが無ければ再帰的に作成)
 	/// </summary>
 	/// <param name="path">ディレクトリパス</param>
-	private static void CreateDirectoryPath(string path)
+	private static void CreateDirectoryPath(string apath)
 	{
+		string path = apath.Replace('\\', '/');
+
 		//親ディレクトリ作成
 		string parent_path = System.IO.Path.GetDirectoryName(path);
 		if (!string.IsNullOrEmpty(parent_path) && !System.IO.Directory.Exists(parent_path)) {

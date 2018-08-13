@@ -122,6 +122,8 @@ namespace MMD
 				string path = format_.meta_header.folder + "/";
 				string name = GetFilePathString(format_.meta_header.name);
 				string file_name = path + name + ".avatar.asset";
+				file_name = file_name.Replace('\\', '/');
+
 				avatar_setting.CreateAsset(file_name);
 			} else {
 				root_game_object_.AddComponent<Animation>();	// アニメーション追加
@@ -441,12 +443,14 @@ namespace MMD
 		void CreateAssetForMesh(Mesh mesh, int index)
 		{
 			string path = format_.meta_header.folder + "/Meshes/";
+			path = path.Replace('\\', '/');
 			if (!System.IO.Directory.Exists(path)) { 
 				AssetDatabase.CreateFolder(format_.meta_header.folder, "Meshes");
 			}
 			
 			string name = GetFilePathString(format_.meta_header.name);
 			string file_name = path + index.ToString() + "_" + name + ".asset";
+			file_name = file_name.Replace('\\', '/');
 			AssetDatabase.CreateAsset(mesh, file_name);
 		}
 		
@@ -459,6 +463,7 @@ namespace MMD
 		{
 			// 適当なフォルダに投げる
 			string path = format_.meta_header.folder + "/Materials/";
+			path = path.Replace('\\', '/');
 			if (!System.IO.Directory.Exists(path)) { 
 				AssetDatabase.CreateFolder(format_.meta_header.folder, "Materials");
 			}
@@ -747,6 +752,7 @@ namespace MMD
 			if (material.usually_texture_index < format_.texture_list.texture_file.Length) {
 				string texture_file_name = format_.texture_list.texture_file[material.usually_texture_index];
 				string path = format_.meta_header.folder + "/" + texture_file_name;
+				path = path.Replace('\\', '/');
 				main_texture = (Texture2D)AssetDatabase.LoadAssetAtPath(path, typeof(Texture2D));
 			}
 			
@@ -781,6 +787,7 @@ namespace MMD
 			if (material.sphere_texture_index < format_.texture_list.texture_file.Length) {
 				string sphere_texture_file_name = format_.texture_list.texture_file[material.sphere_texture_index];
 				string path = format_.meta_header.folder + "/" + sphere_texture_file_name;
+				path = path.Replace('\\', '/');
 				Texture2D sphere_texture = (Texture2D)UnityEditor.AssetDatabase.LoadAssetAtPath(path, typeof(Texture2D));
 				
 				switch (material.sphere_mode) {
@@ -948,6 +955,7 @@ namespace MMD
 			for (int i = 0, i_max = materials.Length; i < i_max; ++i) {
 				string name = GetFilePathString(format_.material_list.material[i].name);
 				string file_name = path + i.ToString() + "_" + name + ".asset";
+				file_name = file_name.Replace('\\', '/');
 				AssetDatabase.CreateAsset(materials[i], file_name);
 			}
 		}
@@ -1528,7 +1536,7 @@ namespace MMD
             result.rotatable = (bone.bone_flag & PMXFormat.Bone.Flag.Rotatable) > 0;
             result.movable = (bone.bone_flag & PMXFormat.Bone.Flag.Movable) > 0;
 
-			if (0.0f != bone.additional_rate) {
+			if ((0.0f != bone.additional_rate) && (bone.additional_parent_index < bones.Length)) {
 				//付与親が有るなら
 				result.additive_parent = bones[bone.additional_parent_index].GetComponent<BoneController>();
 				result.additive_rate = bone.additional_rate;
@@ -1670,6 +1678,7 @@ namespace MMD
 			
 			string name = GetFilePathString(rigidbody.name);
 			string file_name = format_.meta_header.folder + "/Physics/" + index.ToString() + "_" + name + ".asset";
+			file_name = file_name.Replace('\\', '/');
 			AssetDatabase.CreateAsset(material, file_name);
 			return material;
 		}
@@ -1952,13 +1961,13 @@ namespace MMD
 			// Angular
 			if (joint.spring_rotation.x != 0.0f) {
 				drive = new JointDrive();
-				drive.mode = JointDriveMode.PositionAndVelocity;
+				//drive.mode = JointDriveMode.PositionAndVelocity;
 				drive.positionSpring = joint.spring_rotation.x;
 				conf.angularXDrive = drive;
 			}
 			if (joint.spring_rotation.y != 0.0f || joint.spring_rotation.z != 0.0f) {
 				drive = new JointDrive();
-				drive.mode = JointDriveMode.PositionAndVelocity;
+				//drive.mode = JointDriveMode.PositionAndVelocity;
 				drive.positionSpring = (joint.spring_rotation.y + joint.spring_rotation.z) * 0.5f;
 				conf.angularYZDrive = drive;
 			}
@@ -2025,7 +2034,7 @@ namespace MMD
 		/// <returns>ファイルパスに使用可能な文字列</returns>
 		/// <param name='src'>ファイルパスに使用したい文字列</param>
 		private static string GetFilePathString(string src) {
-			return src.Replace('\\', '＼')
+			return src.Replace('\\', '／')
 						.Replace('/',  '／')
 						.Replace(':',  '：')
 						.Replace('*',  '＊')

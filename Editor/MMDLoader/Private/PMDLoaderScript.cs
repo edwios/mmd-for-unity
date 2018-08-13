@@ -13,7 +13,8 @@ public class PMDLoaderScript {
 	/// </summary>
 	/// <param name='file_path'>PMDファイルのパス</param>
 	/// <returns>ヘッダー</returns>
-	public static PMDFormat.Header GetHeader(string file_path) {
+	public static PMDFormat.Header GetHeader(string afile_path) {
+		string file_path = afile_path.Replace('\\', '/');
 		PMDLoaderScript loader = new PMDLoaderScript();
 		return loader.GetHeader_(file_path);
 	}
@@ -23,7 +24,8 @@ public class PMDLoaderScript {
 	/// </summary>
 	/// <param name='file_path'>PMDファイルのパス</param>
 	/// <returns>内部形式データ</returns>
-	public static PMDFormat Import(string file_path) {
+	public static PMDFormat Import(string afile_path) {
+		string file_path = afile_path.Replace('\\', '/');
 		PMDLoaderScript loader = new PMDLoaderScript();
 		return loader.Import_(file_path);
 	}
@@ -36,8 +38,9 @@ public class PMDLoaderScript {
 	/// </remarks>
 	private PMDLoaderScript() {}
 
-	private PMDFormat.Header GetHeader_(string file_path) {
+	private PMDFormat.Header GetHeader_(string afile_path) {
 		PMDFormat.Header result;
+		string file_path = afile_path.Replace('\\', '/');
 		using (FileStream stream = new FileStream(file_path, FileMode.Open, FileAccess.Read))
 		using (BinaryReader bin = new BinaryReader(stream)) {
 			file_path_ = null;
@@ -47,7 +50,8 @@ public class PMDLoaderScript {
 		return result;
 	}
 
-	private PMDFormat Import_(string file_path) {
+	private PMDFormat Import_(string afile_path) {
+		string file_path = afile_path.Replace('\\', '/');
 		using (FileStream stream = new FileStream(file_path, FileMode.Open, FileAccess.Read))
 		using (BinaryReader bin = new BinaryReader(stream)) {
 			file_path_ = file_path;

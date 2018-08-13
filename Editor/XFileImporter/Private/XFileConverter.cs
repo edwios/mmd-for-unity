@@ -48,12 +48,13 @@ namespace xfile {
 		
 		private void CreateFolder() {
 			string buf = folderPath;
-			buf.Replace("/", "\\");
+			//buf.Replace("/", "\\");
 			System.IO.Directory.CreateDirectory(buf + "Materials");	// とりあえず、マテリアルのフォルダ作成 
 		}
 		
 		public XFileConverter(UnityEngine.Object xfile) {
 			filePath = UnityEditor.AssetDatabase.GetAssetPath(xfile);
+			filePath = filePath.Replace('\\', '/');
 			folderPath = GetFolderPath();
 			fileName = GetFileName();
 			
@@ -103,6 +104,7 @@ namespace xfile {
 		
 		public UnityEngine.Object CreatePrefab() {
 			string path = folderPath + fileName.Split('.')[0] + ".prefab";
+			path = path.Replace('\\', '/');
 			return PrefabUtility.CreateEmptyPrefab(path);
 		}
 		

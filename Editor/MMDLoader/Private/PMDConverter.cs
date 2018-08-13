@@ -94,6 +94,7 @@ namespace MMD
 				string path = format_.folder + "/";
 				string name = GetFilePathString(format_.name);
 				string file_name = path + name + ".avatar.asset";
+				file_name = file_name.Replace('\\', '/');
 				avatar_setting.CreateAsset(file_name);
 			} else {
 				root_game_object_.AddComponent<Animation>();	// アニメーション追加
@@ -295,6 +296,7 @@ namespace MMD
 				Texture2D main_texture = null;
 				if (pmdMat.texture_file_name != "") {
 					string path = format_.folder + "/" + pmdMat.texture_file_name;
+					path = path.Replace('\\', '/');
 					main_texture = AssetDatabase.LoadAssetAtPath(path, typeof(Texture2D)) as Texture2D;
 				}
 				
@@ -331,6 +333,7 @@ namespace MMD
 					
 						// ここでスフィアマップ
 						string path = format_.folder + "/" + pmdMat.sphere_map_name;
+						path = path.Replace('\\', '/');
 						Texture sphere_map;
 
 						if (System.IO.File.Exists(path))
@@ -358,6 +361,7 @@ namespace MMD
 						string toon_name = pmdMat.toon_index != 0xFF ?
 							format_.toon_texture_list.toon_texture_file[pmdMat.toon_index] : "toon00.bmp";
 						string resource_path = UnityEditor.AssetDatabase.GetAssetPath(Shader.Find("MMD/HalfLambertOutline"));
+						resource_path = resource_path.Replace('\\', '/');
 						resource_path = System.IO.Path.GetDirectoryName(resource_path);	// resourceディレクトリを取得
 						resource_path += "/toon/" + toon_name;
 
@@ -366,6 +370,7 @@ namespace MMD
 						{
 							// 自前トゥーンの可能性がある
 							resource_path = format_.folder + "/" + format_.toon_texture_list.toon_texture_file[pmdMat.toon_index];
+							resource_path = resource_path.Replace('\\', '/');
 							if (!System.IO.File.Exists(resource_path))
 							{
 								Debug.LogError("Do not exists toon texture: " + format_.toon_texture_list.toon_texture_file[pmdMat.toon_index]);
@@ -402,6 +407,7 @@ namespace MMD
 		{
 			// 適当なフォルダに投げる
 			string path = format_.folder + "/Materials/";
+			path = path.Replace('\\', '/');
 			if (!System.IO.Directory.Exists(path)) { 
 				AssetDatabase.CreateFolder(format_.folder, "Materials");
 			}
@@ -874,14 +880,14 @@ namespace MMD
 			if (joint.spring_rot.x != 0f)
 			{
 				drive = new JointDrive();
-				drive.mode = JointDriveMode.PositionAndVelocity;
+				//drive.mode = JointDriveMode.PositionAndVelocity;
 				drive.positionSpring = joint.spring_rot.x;
 				conf.angularXDrive = drive;
 			}
 			if (joint.spring_rot.y != 0f || joint.spring_rot.z != 0f)
 			{
 				drive = new JointDrive();
-				drive.mode = JointDriveMode.PositionAndVelocity;
+				//drive.mode = JointDriveMode.PositionAndVelocity;
 				drive.positionSpring = (joint.spring_rot.y + joint.spring_rot.z) * 0.5f;
 				conf.angularYZDrive = drive;
 			}
@@ -990,7 +996,7 @@ namespace MMD
 		/// <returns>ファイルパスに使用可能な文字列</returns>
 		/// <param name='src'>ファイルパスに使用したい文字列</param>
 		private static string GetFilePathString(string src) {
-			return src.Replace('\\', '＼')
+			return src.Replace('\\', '／')
 						.Replace('/',  '／')
 						.Replace(':',  '：')
 						.Replace('*',  '＊')

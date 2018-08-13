@@ -86,8 +86,9 @@ public class AvatarSettingScript
 	/// アバターをProjectに登録する
 	/// </summary>
 	/// <param name='file_path'>ファイルパス</param>
-	public void CreateAsset(string file_path)
+	public void CreateAsset(string afile_path)
 	{
+		string file_path = afile_path.Replace('\\', '/');
 		if (avatar_) {
 			AssetDatabase.CreateAsset(avatar_, file_path);
 		} else {

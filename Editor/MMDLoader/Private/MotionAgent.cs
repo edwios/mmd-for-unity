@@ -15,7 +15,7 @@ namespace MMD {
 			if (string.IsNullOrEmpty(file_path)) {
 				throw new System.ArgumentException();
 			}
-			file_path_ = file_path;
+			file_path_ = file_path.Replace('\\', '/');
 			header_ = VMDFormatFactory.GetHeader(file_path_); //VMD読み込み
 			format_ = null;
 		}
@@ -45,7 +45,7 @@ namespace MMD {
 				// フォルダを生成してアニメーションのファイルを書き出す
 				string prefab_folder = AssetDatabase.GetAssetPath(assign_pmd);
 				prefab_folder = Path.GetDirectoryName(prefab_folder);
-
+				prefab_folder = prefab_folder.Replace('\\', '/');
 				if (!Directory.Exists(prefab_folder + "/Animation"))
 					AssetDatabase.CreateFolder(prefab_folder, "Animation");
 
